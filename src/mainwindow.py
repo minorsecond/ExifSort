@@ -18,6 +18,12 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
 
         # Set connections
         self.mainButtonBox.accepted.connect(self.read_images)
+        self.populate_attribute_picker()
+
+    def populate_attribute_picker(self):
+        """
+        Populate the attribute picker with valid values.
+        """
 
         self.exif_attributes = {
             "Camera make {cmake}": 'Exif.Image.Make',
