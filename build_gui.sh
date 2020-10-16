@@ -1,0 +1,1 @@
+/Users/rwardrup/miniconda3/envs/ExifSort/bin/pyuic5 ~/Projects/ExifSort/gui/ui_mainwindow.ui -o ~/Projects/ExifSort/gui/ui_mainwindow.py
