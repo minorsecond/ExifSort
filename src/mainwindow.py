@@ -16,6 +16,8 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         self.setupUi(self)
         self.setFixedSize(632, 300)
         self.progressBar.setValue(0)
+        self.outputPathEdit.setDisabled(True)
+        self.outputPathBrowseButton.setDisabled(True)
 
         # Set connections
         self.mainButtonBox.accepted.connect(self.read_images)
