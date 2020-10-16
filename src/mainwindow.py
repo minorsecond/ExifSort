@@ -21,7 +21,10 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
 
         # Set connections
         self.mainButtonBox.accepted.connect(self.read_images)
+
+        self.exif_attributes = {}
         self.populate_attribute_picker()
+        self.images = []
 
     def populate_attribute_picker(self):
         """
@@ -79,10 +82,8 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         """
 
         file_extensions = []
-        images = []
+        self.images = []
         input_path = self.inputPathEdit.text()
-
-        attributes_to_get = self.get_attributes()
 
         if self.jpgCheckBox.isChecked():
             file_extensions.extend([".jpg", ".jpeg"])
@@ -91,9 +92,9 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         if self.tiffCheckBox.isChecked():
             file_extensions.extend([".tiff", ".tif"])
 
-        for root, dirnames, filenames in os.walk(input_path):
+        for root, directory_names, filenames in os.walk(input_path):
             for file in filenames:
                 if os.path.splitext(file)[1].lower() in file_extensions:
                     source_path = os.path.join(root, file)
                     image = image_read.Image(source_path)
-                    images.append(image)
+                    self.images.append(image)
