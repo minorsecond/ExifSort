@@ -21,6 +21,7 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
 
         # Set connections
         self.mainButtonBox.accepted.connect(self.read_images)
+        self.attributeSelectorInput.activated.connect(self.add_attribute)
 
         self.exif_attributes = {}
         self.populate_attribute_picker()
@@ -98,3 +99,15 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
                     source_path = os.path.join(root, file)
                     image = image_read.Image(source_path)
                     self.images.append(image)
+
+    def add_attribute(self):
+        """
+        Add attribute to filename format bar when clicked in picker.
+        """
+
+        chosen_attribute = self.attributeSelectorInput.currentText()
+        pattern = "{(.*?)}"
+        chosen_attribute = re.search(pattern, chosen_attribute).group()
+        filename_format_text = self.filenameFormatLineEdit.text()
+        filename_format_text += chosen_attribute
+        self.filenameFormatLineEdit.setText(filename_format_text)
