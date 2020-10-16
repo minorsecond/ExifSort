@@ -2,6 +2,7 @@ from gui import ui_mainwindow
 from src import image_read
 from PyQt5 import QtWidgets
 import os
+import re
 
 
 class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
@@ -44,6 +45,24 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         for attribute in self.exif_attributes:
             self.attributeSelectorInput.addItem(attribute)
 
+    def get_attributes(self):
+        """
+        Get the attributes from the text input bar
+        :return: Selected attributes that correspond to dictionary keys from Py3Exiv2
+        """
+
+        filename_structure = self.filenameFormatLineEdit.text()
+        pattern = "{(.*?)}"
+        selected_attributes = re.findall(pattern, filename_structure)
+        attributes_to_get = []
+
+        for name, exif_tag in self.exif_attributes.items():
+            tag_abbrev = re.findall(pattern, name)[0]
+            if tag_abbrev in selected_attributes:
+                attributes_to_get.append(exif_tag)
+
+        return attributes_to_get
+
     def read_images(self):
         """
         Read the images found within path
@@ -53,7 +72,8 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         file_extensions = []
         images = []
         input_path = self.inputPathEdit.text()
-        print(input_path)
+
+        attributes_to_get = self.get_attributes()
 
         if self.jpgCheckBox.isChecked():
             file_extensions.extend([".jpg", ".jpeg"])
@@ -67,5 +87,4 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
                 if os.path.splitext(file)[1].lower() in file_extensions:
                     source_path = os.path.join(root, file)
                     image = image_read.Image(source_path)
-                    print(image.datetime)
                     images.append(image)
