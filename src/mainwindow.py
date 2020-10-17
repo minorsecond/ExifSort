@@ -23,15 +23,6 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         self.mainButtonBox.accepted.connect(self.read_images)
         self.attributeSelectorInput.activated.connect(self.add_attribute)
 
-        self.exif_attributes = {}
-        self.populate_attribute_picker()
-        self.images = []
-
-    def populate_attribute_picker(self):
-        """
-        Populate the attribute picker with valid values.
-        """
-
         self.exif_attributes = {
             "Camera make {cmake}": 'Exif.Image.Make',
             "Camera Model {cmodel}": 'Exif.Image.Model',
@@ -52,6 +43,14 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
             "Lens Model {lmodel}": 'Exif.Photo.LensModel',
             "Lens Serial Number {lserial}": 'Exif.Photo.LensSerialNumber',
         }
+
+        self.populate_attribute_picker()
+        self.images = []
+
+    def populate_attribute_picker(self):
+        """
+        Populate the attribute picker with valid values.
+        """
 
         self.exif_attributes = {key: value for key, value in sorted(self.exif_attributes.items())}
 
