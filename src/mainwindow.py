@@ -20,17 +20,17 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         self.outputPathBrowseButton.setDisabled(True)
 
         # Set connections
-        self.mainButtonBox.accepted.connect(self.read_images)
+        self.mainButtonBox.accepted.connect(self.process_images)
         self.attributeSelectorInput.activated.connect(self.add_attribute)
 
         self.exif_attributes = {
+
             "Camera make {cmake}": 'Exif.Image.Make',
             "Camera Model {cmodel}": 'Exif.Image.Model',
             "Camera Orientation {corient}": 'Exif.Image.Orientation',
             "Image X Resolution {xres}": 'Exif.Photo.FocalPlaneXResolution',
             "Image Y Resolution {yres}": 'Exif.Photo.FocalPlaneYResolution',
             "Exposure Time {etime}": 'Exif.Photo.ExposureTime',
-            "FD Number {fdnum}": 'Exif.Photo.FNumber',
             "ISO {iso}": 'Exif.Photo.ISOSpeedRatings',
             "Date & Time Created {dtime}": 'Exif.Photo.DateTimeOriginal',
             "Aperture Value {aperval}": 'Exif.Photo.ApertureValue',
@@ -46,6 +46,7 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
 
         self.populate_attribute_picker()
         self.images = []
+        self.images_with_paths = {}
 
     def populate_attribute_picker(self):
         """
@@ -110,3 +111,52 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         filename_format_text = self.filenameFormatLineEdit.text()
         filename_format_text += chosen_attribute
         self.filenameFormatLineEdit.setText(filename_format_text)
+
+    def format_to_path(self):
+        """
+        Move the images
+        """
+
+        path_format = self.filenameFormatLineEdit.text()
+
+        # Replace all substrings with EXIF attributes
+        for image in self.images:
+            tmp_path_format = path_format
+            tmp_path_format.replace("{cmake}", image.camera_make)
+            tmp_path_format.replace("{cmodel}", image.camera_model)
+            tmp_path_format.replace("{cserial}", image.camera_serial_num)
+            tmp_path_format.replace("{corient", image.camera_orientation)
+            tmp_path_format.replace("{xres}", image.x_resolution)
+            tmp_path_format.replace("{yres}", image.y_resolution)
+            tmp_path_format.replace("{etime}", image.exposure_time)
+            tmp_path_format.replace("{iso}", image.iso)
+            tmp_path_format.replace("{dtime}", image.datetime)
+            tmp_path_format.replace("{aperval}", image.aperture_value)
+            tmp_path_format.replace("{meter}", image.meter_mode)
+            tmp_path_format.replace("{inum}", image.image_number)
+            tmp_path_format.replace("{xmode}", image.exposure_mode)
+            tmp_path_format.replace("{wb}", image.white_balance)
+            tmp_path_format.replace("{lmake}", image.lens_make)
+            tmp_path_format.replace("{lmodel}", image.lens_model)
+            tmp_path_format.replace("{lserial}", image.lens_serial_num)
+
+            # Build the dict
+            self.images_with_paths[image.source_path] = tmp_path_format
+        print(self.images_with_paths)
+
+    def process_images(self):
+        """
+        Run the image processing.
+        """
+
+        self.read_images()
+        self.format_to_path()
+
+def build_path(path):
+    """
+    Builds the path for the file
+    :param path: File path
+    """
+
+    directory_path = os.path.dirname(os.path.realpath(path))
+    os.makedirs(directory_path, exist_ok=True)
