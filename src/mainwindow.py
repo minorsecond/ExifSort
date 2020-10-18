@@ -25,7 +25,7 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
 
         self.exif_attributes = {
 
-            "Camera make {cmake}": 'Exif.Image.Make',
+            "Camera Make {cmake}": 'Exif.Image.Make',
             "Camera Model {cmodel}": 'Exif.Image.Model',
             "Camera Orientation {corient}": 'Exif.Image.Orientation',
             "Image X Resolution {xres}": 'Exif.Photo.FocalPlaneXResolution',
