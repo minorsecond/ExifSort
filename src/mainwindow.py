@@ -26,6 +26,7 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         # Set connections
         self.mainButtonBox.accepted.connect(self.process_images)
         self.attributeSelectorInput.activated.connect(self.add_attribute)
+        self.seperateOutputPathCheckbox.stateChanged.connect(self.enable_disable_output_path_edit)
 
         self.exif_attributes = {
 
@@ -170,6 +171,18 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         output_path = self.get_output_path()
         self.read_images()
         self.format_to_path(output_path)
+
+    def enable_disable_output_path_edit(self):
+        """
+        Enable/disable the output path edit when checkbox is modified
+        """
+
+        if self.seperateOutputPathCheckbox.isChecked():
+            self.outputPathEdit.setEnabled(True)
+            self.outputPathBrowseButton.setEnabled(True)
+        else:
+            self.outputPathEdit.setDisabled(True)
+            self.outputPathBrowseButton.setEnabled(False)
 
 
 def build_path(path):
