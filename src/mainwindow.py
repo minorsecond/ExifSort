@@ -14,7 +14,7 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self)
         ui_mainwindow.Ui_MainWindow.__init__(self)
         self.setupUi(self)
-        self.setFixedSize(632, 300)
+        self.setFixedSize(632, 325)
         self.progressBar.setValue(0)
         self.outputPathEdit.setDisabled(True)
         self.outputPathBrowseButton.setDisabled(True)
