@@ -117,32 +117,30 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         Move the images
         """
 
-        path_format = self.filenameFormatLineEdit.text()
-
         # Replace all substrings with EXIF attributes
         for image in self.images:
-            tmp_path_format = path_format
-            tmp_path_format.replace("{cmake}", image.camera_make)
-            tmp_path_format.replace("{cmodel}", image.camera_model)
-            tmp_path_format.replace("{cserial}", image.camera_serial_num)
-            tmp_path_format.replace("{corient", image.camera_orientation)
-            tmp_path_format.replace("{xres}", image.x_resolution)
-            tmp_path_format.replace("{yres}", image.y_resolution)
-            tmp_path_format.replace("{etime}", image.exposure_time)
-            tmp_path_format.replace("{iso}", image.iso)
-            tmp_path_format.replace("{dtime}", image.datetime)
-            tmp_path_format.replace("{aperval}", image.aperture_value)
-            tmp_path_format.replace("{meter}", image.meter_mode)
-            tmp_path_format.replace("{inum}", image.image_number)
-            tmp_path_format.replace("{xmode}", image.exposure_mode)
-            tmp_path_format.replace("{wb}", image.white_balance)
-            tmp_path_format.replace("{lmake}", image.lens_make)
-            tmp_path_format.replace("{lmodel}", image.lens_model)
-            tmp_path_format.replace("{lserial}", image.lens_serial_num)
+            path_format = self.filenameFormatLineEdit.text()
+            path_format = path_format.replace("{cmake}", image.camera_make)
+            path_format = path_format.replace("{cmodel}", image.camera_model)
+            path_format = path_format.replace("{cserial}", image.camera_serial_num)
+            path_format = path_format.replace("{corient}", str(image.camera_orientation))
+            path_format = path_format.replace("{xres}", str(image.x_resolution))
+            path_format = path_format.replace("{yres}", str(image.y_resolution))
+            path_format = path_format.replace("{etime}", str(image.exposure_time))
+            path_format = path_format.replace("{iso}", str(image.iso))
+            path_format = path_format.replace("{dtime}", image.datetime)
+            path_format = path_format.replace("{aperval}", str(image.aperture_value))
+            path_format = path_format.replace("{meter}", str(image.meter_mode))
+            path_format = path_format.replace("{inum}", str(image.image_number))
+            path_format = path_format.replace("{xmode}", str(image.exposure_mode))
+            path_format = path_format.replace("{wb}", str(image.white_balance))
+            path_format = path_format.replace("{lmake}", image.lens_make)
+            path_format = path_format.replace("{lmodel}", image.lens_model)
+            path_format = path_format.replace("{lserial}", image.lens_serial_num)
 
             # Build the dict
-            self.images_with_paths[image.source_path] = tmp_path_format
-        print(self.images_with_paths)
+            self.images_with_paths[image.source_path] = path_format
+            print(path_format)
 
     def process_images(self):
         """
