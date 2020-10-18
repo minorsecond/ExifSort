@@ -3,6 +3,7 @@ from src import image_read
 from PyQt5 import QtWidgets
 import os
 import re
+import shutil
 
 
 class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
@@ -50,8 +51,6 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         }
 
         self.populate_attribute_picker()
-        self.images = []
-        self.images_with_paths = {}
 
     def populate_attribute_picker(self):
         """
@@ -88,7 +87,7 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         """
 
         file_extensions = []
-        self.images = []
+        images = []
         input_path = self.inputPathEdit.text()
 
         if self.jpgCheckBox.isChecked():
@@ -103,7 +102,8 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
                 if os.path.splitext(file)[1].lower() in file_extensions:
                     source_path = os.path.join(root, file)
                     image = image_read.Image(source_path)
-                    self.images.append(image)
+                    images.append(image)
+        return images
 
     def add_attribute(self):
         """
@@ -117,13 +117,30 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         filename_format_text += chosen_attribute
         self.pathFormatLineEdit.setText(filename_format_text)
 
-    def format_to_path(self, output_path):
+    def replace_whitespaces(self, string):
+        """
+        Replaces whitespaces in string with selected character.
+        :param string: String denoting path that should have whitespaces removed.
+        :return: Path with whitespaces removed.
+        """
+
+        if self.whiteSpaceReplacementSelector.currentText() == '.':
+            return string.replace(' ', '.')
+        elif self.whiteSpaceReplacementSelector.currentText() == '_':
+            return string.replace(' ', '_')
+        elif self.whiteSpaceReplacementSelector.currentText() == '-':
+            return string.replace(' ', '-')
+        else:
+            return string
+
+    def format_to_path(self, images, output_path):
         """
         Move the images
         """
 
+        images_with_paths = {}
         # Replace all substrings with EXIF attributes
-        for image in self.images:
+        for image in images:
             image_filename = os.path.basename(image.source_path)
             path_format = self.pathFormatLineEdit.text()
             path_format = path_format.replace("{cmake}", image.camera_make)
@@ -145,10 +162,12 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
             path_format = path_format.replace("{lserial}", image.lens_serial_num)
 
             # Build the dict
+            path_format = self.replace_whitespaces(path_format)
             new_root_path = os.path.join(output_path, path_format)
             new_image_path = os.path.join(new_root_path, image_filename)
-            self.images_with_paths[image.source_path] = new_image_path
-            print(self.images_with_paths)
+            images_with_paths[image.source_path] = new_image_path
+
+        return images_with_paths
 
     def get_output_path(self):
         """
@@ -163,14 +182,31 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
 
         return output_path
 
+    def move_images(self, image_paths):
+        """
+        Move the images from source to destination path
+        """
+
+        image_counter = 0
+        for source, destination in image_paths.items():
+
+            # Make directory if it doesn't yet exist
+            build_path(destination)
+
+            shutil.move(source, destination)
+            image_counter += 1
+            self.progressBar.setValue(image_counter)
+
     def process_images(self):
         """
         Run the image processing.
         """
 
         output_path = self.get_output_path()
-        self.read_images()
-        self.format_to_path(output_path)
+        images = self.read_images()
+        image_paths = self.format_to_path(images, output_path)
+        self.progressBar.setMaximum(len(images))
+        self.move_images(image_paths)
 
     def enable_disable_output_path_edit(self):
         """
