@@ -19,6 +19,10 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         self.outputPathEdit.setDisabled(True)
         self.outputPathBrowseButton.setDisabled(True)
 
+        # Whitespace replacement options
+        for replacement_char in ("None", '.', '_', '-'):
+            self.whiteSpaceReplacementSelector.addItem(replacement_char)
+
         # Set connections
         self.mainButtonBox.accepted.connect(self.process_images)
         self.attributeSelectorInput.activated.connect(self.add_attribute)
