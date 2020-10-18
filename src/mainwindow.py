@@ -28,9 +28,10 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         self.mainButtonBox.accepted.connect(self.process_images)
         self.attributeSelectorInput.activated.connect(self.add_attribute)
         self.seperateOutputPathCheckbox.stateChanged.connect(self.enable_disable_output_path_edit)
+        self.inputPathBrowseButton.clicked.connect(self.get_input_directory)
+        self.outputPathBrowseButton.clicked.connect(self.get_output_directory)
 
         self.exif_attributes = {
-
             "Camera Make {cmake}": 'Exif.Image.Make',
             "Camera Model {cmodel}": 'Exif.Image.Model',
             "Camera Orientation {corient}": 'Exif.Image.Orientation',
@@ -51,6 +52,24 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         }
 
         self.populate_attribute_picker()
+
+    def get_input_directory(self):
+        """
+        Gets the input directory.
+        :return: Input path.
+        """
+
+        input_path = str(QtWidgets.QFileDialog.getExistingDirectory(self, "Select Input Directory"))
+        self.inputPathEdit.setText(input_path)
+
+    def get_output_directory(self):
+        """
+        Gets the output directory.
+        :return: Output path.
+        """
+
+        output_path = str(QtWidgets.QFileDialog.getExistingDirectory(self, "Select Output Directory"))
+        self.outputPathEdit.setText(output_path)
 
     def populate_attribute_picker(self):
         """
