@@ -25,9 +25,9 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="1" column="0">
-        <widget class="QLabel" name="filenameFormatLabel">
+        <widget class="QLabel" name="pathFormatLabel">
          <property name="text">
-          <string>FIlename Format:</string>
+          <string>Path Format:</string>
          </property>
         </widget>
        </item>
@@ -46,7 +46,7 @@
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QLineEdit" name="filenameFormatLineEdit"/>
+        <widget class="QLineEdit" name="pathFormatLineEdit"/>
        </item>
        <item row="3" column="2">
         <widget class="QComboBox" name="whiteSpaceReplacementSelector"/>
@@ -90,7 +90,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QCheckBox" name="checkBox_4">
+        <widget class="QCheckBox" name="seperateOutputPathCheckbox">
          <property name="text">
           <string>Separate output path</string>
          </property>

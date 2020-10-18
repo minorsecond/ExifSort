@@ -64,7 +64,7 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         :return: Selected attributes that correspond to dictionary keys from Py3Exiv2
         """
 
-        filename_structure = self.filenameFormatLineEdit.text()
+        filename_structure = self.pathFormatLineEdit.text()
         pattern = "{(.*?)}"
         selected_attributes = re.findall(pattern, filename_structure)
         attributes_to_get = []
@@ -108,18 +108,19 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         chosen_attribute = self.attributeSelectorInput.currentText()
         pattern = "{(.*?)}"
         chosen_attribute = re.search(pattern, chosen_attribute).group()
-        filename_format_text = self.filenameFormatLineEdit.text()
+        filename_format_text = self.pathFormatLineEdit.text()
         filename_format_text += chosen_attribute
-        self.filenameFormatLineEdit.setText(filename_format_text)
+        self.pathFormatLineEdit.setText(filename_format_text)
 
-    def format_to_path(self):
+    def format_to_path(self, output_path):
         """
         Move the images
         """
 
         # Replace all substrings with EXIF attributes
         for image in self.images:
-            path_format = self.filenameFormatLineEdit.text()
+            image_filename = os.path.basename(image.source_path)
+            path_format = self.pathFormatLineEdit.text()
             path_format = path_format.replace("{cmake}", image.camera_make)
             path_format = path_format.replace("{cmodel}", image.camera_model)
             path_format = path_format.replace("{cserial}", image.camera_serial_num)
@@ -139,16 +140,33 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
             path_format = path_format.replace("{lserial}", image.lens_serial_num)
 
             # Build the dict
-            self.images_with_paths[image.source_path] = path_format
-            print(path_format)
+            new_root_path = os.path.join(output_path, path_format)
+            new_image_path = os.path.join(new_root_path, image_filename)
+            self.images_with_paths[image.source_path] = new_image_path
+            print(self.images_with_paths)
+
+    def get_output_path(self):
+        """
+        Gets the output path
+        :return: string denoting output path
+        """
+
+        if self.seperateOutputPathCheckbox.isChecked():
+            output_path = self.outputPathEdit.text()
+        else:
+            output_path = self.inputPathEdit.text()
+
+        return output_path
 
     def process_images(self):
         """
         Run the image processing.
         """
 
+        output_path = self.get_output_path()
         self.read_images()
-        self.format_to_path()
+        self.format_to_path(output_path)
+
 
 def build_path(path):
     """
