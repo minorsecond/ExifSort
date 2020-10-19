@@ -155,7 +155,7 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
 
     def format_to_path(self, images, output_path):
         """
-        Move the images
+        Build the output paths for the images.
         """
 
         images_with_paths = {}
@@ -190,7 +190,6 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
             new_root_path = os.path.join(output_path, path_format)
             new_image_path = os.path.join(new_root_path, image_filename)
             images_with_paths[image.source_path] = new_image_path
-        print(images_with_paths)
 
         return images_with_paths
 
