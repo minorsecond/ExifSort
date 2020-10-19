@@ -1,7 +1,6 @@
 from gui import ui_mainwindow
 from src import image_read
 from PyQt5 import QtWidgets
-import math
 import os
 import re
 import shutil
@@ -164,7 +163,6 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
             image_filename = os.path.basename(image.source_path)
 
             # Format values
-            aperture_value = str(round(math.pow(2, float(image.aperture_value / 2)), 1))
 
             path_format = self.pathFormatLineEdit.text()
             path_format = path_format.replace("{cmake}", image.camera_make)
@@ -176,7 +174,7 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
             path_format = path_format.replace("{etime}", str(image.exposure_time))
             path_format = path_format.replace("{iso}", str(image.iso))
             path_format = path_format.replace("{dtime}", image.datetime)
-            path_format = path_format.replace("{aperval}", aperture_value)
+            path_format = path_format.replace("{aperval}", self.aperture_value)
             path_format = path_format.replace("{meter}", str(image.meter_mode))
             path_format = path_format.replace("{inum}", str(image.image_number))
             path_format = path_format.replace("{xmode}", str(image.exposure_mode))

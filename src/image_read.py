@@ -3,6 +3,7 @@ Read the image metadata & EXIF data
 """
 
 import pyexiv2
+import math
 
 
 class Image:
@@ -63,7 +64,7 @@ class Image:
             print(f"Missing datetime tag")
             self.datetime = missing_tag
         try:
-            self.aperture_value = img["Exif.Photo.ApertureValue"].value
+            self.aperture_value = str(round(math.pow(2, float(img["Exif.Photo.ApertureValue"].value / 2)), 1))
         except KeyError:
             print(f"Missing aperture value tag")
             self.aperture_value = missing_tag
