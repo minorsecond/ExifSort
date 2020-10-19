@@ -164,7 +164,7 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
             image_filename = os.path.basename(image.source_path)
 
             # Format values
-            aperture_value = str(round(2 * math.pow(2, float(image.aperture_value / 2)), 1))
+            aperture_value = str(round(math.pow(2, float(image.aperture_value / 2)), 1))
 
             path_format = self.pathFormatLineEdit.text()
             path_format = path_format.replace("{cmake}", image.camera_make)
@@ -190,6 +190,7 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
             new_root_path = os.path.join(output_path, path_format)
             new_image_path = os.path.join(new_root_path, image_filename)
             images_with_paths[image.source_path] = new_image_path
+        print(images_with_paths)
 
         return images_with_paths
 
