@@ -106,6 +106,16 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        MainWindow.setTabOrder(self.inputPathEdit, self.inputPathBrowseButton)
+        MainWindow.setTabOrder(self.inputPathBrowseButton, self.seperateOutputPathCheckbox)
+        MainWindow.setTabOrder(self.seperateOutputPathCheckbox, self.outputPathEdit)
+        MainWindow.setTabOrder(self.outputPathEdit, self.outputPathBrowseButton)
+        MainWindow.setTabOrder(self.outputPathBrowseButton, self.jpgCheckBox)
+        MainWindow.setTabOrder(self.jpgCheckBox, self.rawCheckBox)
+        MainWindow.setTabOrder(self.rawCheckBox, self.tiffCheckBox)
+        MainWindow.setTabOrder(self.tiffCheckBox, self.pathFormatLineEdit)
+        MainWindow.setTabOrder(self.pathFormatLineEdit, self.attributeSelectorInput)
+        MainWindow.setTabOrder(self.attributeSelectorInput, self.whiteSpaceReplacementSelector)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

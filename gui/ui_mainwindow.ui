@@ -199,6 +199,19 @@
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>inputPathEdit</tabstop>
+  <tabstop>inputPathBrowseButton</tabstop>
+  <tabstop>seperateOutputPathCheckbox</tabstop>
+  <tabstop>outputPathEdit</tabstop>
+  <tabstop>outputPathBrowseButton</tabstop>
+  <tabstop>jpgCheckBox</tabstop>
+  <tabstop>rawCheckBox</tabstop>
+  <tabstop>tiffCheckBox</tabstop>
+  <tabstop>pathFormatLineEdit</tabstop>
+  <tabstop>attributeSelectorInput</tabstop>
+  <tabstop>whiteSpaceReplacementSelector</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
