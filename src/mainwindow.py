@@ -216,7 +216,7 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
 
             # Make directory if it doesn't yet exist
             build_path(destination)
-
+            print(f"Moving {source} to {destination}")
             shutil.move(source, destination)
             image_counter += 1
             self.progressBar.setValue(image_counter)
