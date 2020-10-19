@@ -15,7 +15,7 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
         QtWidgets.QMainWindow.__init__(self)
         ui_mainwindow.Ui_MainWindow.__init__(self)
         self.setupUi(self)
-        self.setFixedSize(632, 325)
+        self.setFixedSize(700, 325)
         self.progressBar.setValue(0)
         self.outputPathEdit.setDisabled(True)
         self.outputPathBrowseButton.setDisabled(True)
@@ -39,7 +39,8 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
             "Image Y Resolution {yres}": 'Exif.Photo.FocalPlaneYResolution',
             "Exposure Time {etime}": 'Exif.Photo.ExposureTime',
             "ISO {iso}": 'Exif.Photo.ISOSpeedRatings',
-            "Date & Time Created {dtime}": 'Exif.Photo.DateTimeOriginal',
+            "Date & Time Created (YYYY-MM-DD HH-MM) {dtime}": 'Exif.Photo.DateTimeOriginal',
+            "Date & Time Created (YYYY-MM-DD HH-MM-SS) {dtimes}": 'Exif.Photo.DateTimeOriginal',
             "Aperture Value {aperval}": 'Exif.Photo.ApertureValue',
             "Metering Mode {meter}": 'Exif.Photo.MeteringMode',
             "Image Number {inum}": 'Exif.Image.ImageNumber',
@@ -171,10 +172,11 @@ class MainWindow(QtWidgets.QMainWindow, ui_mainwindow.Ui_MainWindow):
             path_format = path_format.replace("{corient}", str(image.camera_orientation))
             path_format = path_format.replace("{xres}", str(image.x_resolution))
             path_format = path_format.replace("{yres}", str(image.y_resolution))
-            path_format = path_format.replace("{etime}", str(image.exposure_time))
+            path_format = path_format.replace("{etimes}", str(image.exposure_time))
             path_format = path_format.replace("{iso}", str(image.iso))
-            path_format = path_format.replace("{dtime}", image.datetime)
-            path_format = path_format.replace("{aperval}", self.aperture_value)
+            path_format = path_format.replace("{dtime}", image.date_hm)
+            path_format = path_format.replace("{dtimes}", image.date_hms)
+            path_format = path_format.replace("{aperval}", image.aperture_value)
             path_format = path_format.replace("{meter}", str(image.meter_mode))
             path_format = path_format.replace("{inum}", str(image.image_number))
             path_format = path_format.replace("{xmode}", str(image.exposure_mode))

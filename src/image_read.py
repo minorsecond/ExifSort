@@ -59,10 +59,15 @@ class Image:
             print(f"Missing ISO tag")
             self.iso = missing_tag
         try:
-            self.datetime = img["Exif.Photo.DateTimeOriginal"].value.strftime('%Y-%m-%d_%H-%M-%S')
+            self.date_hms = img["Exif.Photo.DateTimeOriginal"].value.strftime('%Y-%m-%d_%H-%M-%S')
         except KeyError:
             print(f"Missing datetime tag")
-            self.datetime = missing_tag
+            self.date_hms = missing_tag
+        try:
+            self.date_hm = img["Exif.Photo.DateTimeOriginal"].value.strftime('%Y-%m-%d_%H-%M')
+        except KeyError:
+            print(f"Missing datetime tag")
+            self.date_hm = missing_tag
         try:
             self.aperture_value = str(round(math.pow(2, float(img["Exif.Photo.ApertureValue"].value / 2)), 1))
         except KeyError:
@@ -94,7 +99,7 @@ class Image:
             print(f"Missing lens make tag")
             self.lens_make = missing_tag
         try:
-            self.lens_model = img["Exif.Photo.LensModel"].value
+            self.lens_model = (img["Exif.Photo.LensModel"].value).replace('/', '')
         except KeyError:
             print(f"Missing lens model tag")
             self.lens_model = missing_tag
